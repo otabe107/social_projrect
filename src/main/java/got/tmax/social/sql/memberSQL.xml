@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mSQL">
+	<select id="login" resultType="int" parameterType="mVO">
+			SELECT
+				count(*)
+			FROM
+				member
+			WHERE
+				id = #{id}
+				AND pw = #{pw}
+	</select>
+	
+	<select id="idCheck" resultType="int" parameterType="string">
+		SELECT
+			count(*)
+		FROM
+			member
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="avtList" resultType="mVO">
+		SELECT
+			ano, savename avatar, gen
+		FROM
+			avatar
+		WHERE
+			ano != 10
+		ORDER BY
+			ano
+	</select>
+	<select id="getInfo" resultType="mVO" parameterType="mVO">
+		SELECT
+			mno, id, name, mail<!--, m.ano ano, savename avatar-->, tel, m.gen, joindate
+		FROM
+			member m<!--, avatar a-->
+		WHERE
+			isshow = 'Y'
+			<!--  AND m.ano = a.ano -->
+		<if test="mno neq 0">
+			AND mno = #{mno}
+		</if>
+		<if test="id neq null">
+			AND id = #{id}
+		</if>
+	</select>
+	
+	<insert id="addMember" parameterType="mVO">
+		<selectKey keyProperty="mno" resultType="int" order="BEFORE">
+			SELECT NVL(MAX(mno) + 1, 1001) FROM member
+		</selectKey>
+		INSERT INTO
+			member(mno, name, id, pw, mail, tel, gen<!--  , ano-->)		
+		VALUES(
+<!-- 
+			(SELECT NVL(MAX(mno) + 1, 1001) FROM member),
+ -->
+			#{mno}, #{name}, #{id}, #{pw}, #{mail}, #{tel}, #{gen}<!--, #{ano} -->
+		)
+	</insert>
+	
+</mapper>

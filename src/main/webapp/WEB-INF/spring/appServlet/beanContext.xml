@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 이 문서는 dao 클래스를 빈처리하기 위한 문서 -->
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						https://www.springframework.org/schema/beans/spring-beans.xsd">
+	<!-- JSON2 -->
+	<bean id="jsonHttpMessageConverter" 
+			class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes" value="application/json" />
+	</bean>
+	
+	<!-- 파일 업로드를 위한 뷰 서블릿 설정 -->
+	<bean id="multipartResolver"
+				class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="50000000" />
+		<property name="maxInMemorySize" value="50000000" />
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+	<!-- dao bean 처리 -->
+	<bean id="mDao" class="got.tmax.social.dao.MemberDao" />
+	<bean id="gDao" class="got.tmax.social.dao.GuestDao" />
+	<bean id="bDao" class="got.tmax.social.dao.BoardDao" />
+	
+	<!-- Util BEAN 처리 -->
+	<bean id="page" class="got.tmax.social.util.PageUtil" />
+	<bean id="futil" class="got.tmax.social.util.FileUtil" />
+	
+	<!-- Service bean 처리 -->
+	 <bean id="bSrvc" class="got.tmax.social.service.BoardService" />
+</beans>
